@@ -1,8 +1,10 @@
 #include <SFML/Graphics.hpp>
+#include <iostream>
+#include "Animation.h"
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(1960, 1080), "Parallax Example",
+    sf::RenderWindow window(sf::VideoMode(1960, 1080), "Don't Get F",
         sf::Style::Titlebar | sf::Style::Close);
     window.setVerticalSyncEnabled(true);
 
@@ -13,21 +15,6 @@ int main()
     sf::Sprite background(t);
     background.setPosition(0, 0);
     background.setColor(sf::Color(255, 255, 255, 200));
-
-    sf::Texture pyTexture;
-    if (!pyTexture.loadFromFile("images/sp3.png"))
-        return EXIT_FAILURE;
-    pyTexture.setRepeated(true);
-    sf::Sprite sprite(pyTexture);
-    sprite.setPosition(100, 733);
-
-    int spriteSizeX = pyTexture.getSize().x / 6;
-    int spriteSizeY = pyTexture.getSize().y / 5;
-
-    sprite.setTextureRect(sf::IntRect(0, 0, spriteSizeX, spriteSizeY));
-
-    int animationFrame = 0;
-    
 
     sf::Shader parallaxShader;
     parallaxShader.loadFromMemory(
@@ -41,12 +28,23 @@ int main()
         "}"
         , sf::Shader::Vertex);
 
-    float offset = 0.f;
-    int frameIndex = 0;
+    sf::RectangleShape player(sf::Vector2f(1500, 1250));
+    player.setPosition(25, 743);
+    sf::Texture playerTexture;
+    playerTexture.loadFromFile("images/sp3.png");
+    player.setTexture(&playerTexture);
 
+    Animation animation(&playerTexture, sf::Vector2u(6, 5), 0.3f);
+
+    float deltaTime = 0.0f;
     sf::Clock clock;
+
+    float offset = 0.f;
+    //sf::Clock clock;
+
     while (window.isOpen())
     {
+        deltaTime = clock.restart().asSeconds();
         sf::Event event;
         while (window.pollEvent(event))
         {
@@ -55,44 +53,18 @@ int main()
                 window.close();
                 break;
             }
-
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-            {
-                sprite.move(.1f, 0.f);
-                sprite.setTextureRect(sf::IntRect(spriteSizeX * animationFrame, spriteSizeY * 1, spriteSizeX, spriteSizeY));
-            }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-            {
-                sprite.move(-.1f, 0.f);
-                sprite.setTextureRect(sf::IntRect(spriteSizeX * animationFrame, spriteSizeY * 3, spriteSizeX, spriteSizeY));
-            }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-            {
-                sprite.move(0.f, -.1f);
-                sprite.setTextureRect(sf::IntRect(spriteSizeX * animationFrame, 0, spriteSizeX, spriteSizeY));
-            }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-            {
-                sprite.move(0.f, .1f);
-                sprite.setTextureRect(sf::IntRect(spriteSizeX * animationFrame, spriteSizeY * 2, spriteSizeX, 32));
-            }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
-            {
-                window.close();
-            }
-            animationFrame++;
-
-            if (animationFrame >= 2) {
-                animationFrame = 0;
-            }
            
         }
 
-        // I set an arbitrary value as the offset, you'd calculate this based on camera position
+        //set an arbitrary value as the offset, you'd calculate this based on camera position
         parallaxShader.setUniform("offset", offset += clock.restart().asSeconds() / 500);
+
+        animation.Update(0, deltaTime);
+        player.setTextureRect(animation.uvRect);
 
         window.clear();
         window.draw(background, &parallaxShader);
+        window.draw(player);
         window.display();
     }
 

@@ -18,5 +18,45 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Animation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="pic\background.gif">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="pic\newRunner_01.gif">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="pic\newRunner_02.gif">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="pic\newRunner_03.gif">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="pic\newRunner_04.gif">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="pic\newRunner_05.gif">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="pic\newRunner_06.gif">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="pic\newRunner_07.gif">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="pic\newRunner_08.gif">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="pic\obstacle.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Animation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
