@@ -28,8 +28,8 @@ int main()
         "}"
         , sf::Shader::Vertex);
 
-    sf::RectangleShape player(sf::Vector2f(1500, 1250));
-    player.setPosition(25, 743);
+    sf::RectangleShape player(sf::Vector2f(250, 250));
+    player.setPosition(0,0);
     sf::Texture playerTexture;
     playerTexture.loadFromFile("images/sp3.png");
     player.setTexture(&playerTexture);
