@@ -28,23 +28,24 @@ int main()
         "}"
         , sf::Shader::Vertex);
 
-    sf::RectangleShape player(sf::Vector2f(250, 250));
-    player.setPosition(0,0);
+    sf::RectangleShape player(sf::Vector2f(400, 400));
+    player.setPosition(100,575);
     sf::Texture playerTexture;
-    playerTexture.loadFromFile("images/sp3.png");
+    if(!playerTexture.loadFromFile("images/sp.png"))
+        return EXIT_FAILURE;
     player.setTexture(&playerTexture);
 
-    Animation animation(&playerTexture, sf::Vector2u(6, 5), 0.3f);
+    Animation animation(&playerTexture, sf::Vector2u(6, 5), 0.2f);
 
     float deltaTime = 0.0f;
-    sf::Clock clock;
+    sf::Clock clock2;
 
     float offset = 0.f;
-    //sf::Clock clock;
+    sf::Clock clock;
 
     while (window.isOpen())
     {
-        deltaTime = clock.restart().asSeconds();
+        deltaTime = clock2.restart().asSeconds();
         sf::Event event;
         while (window.pollEvent(event))
         {
@@ -55,7 +56,7 @@ int main()
             }
            
         }
-
+        
         //set an arbitrary value as the offset, you'd calculate this based on camera position
         parallaxShader.setUniform("offset", offset += clock.restart().asSeconds() / 500);
 
