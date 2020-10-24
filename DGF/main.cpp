@@ -1,12 +1,14 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include "Animation.h"
+#include "Player.h"
 
 int main()
 {
     sf::RenderWindow window(sf::VideoMode(1960, 1080), "Don't Get F",
         sf::Style::Titlebar | sf::Style::Close);
     window.setVerticalSyncEnabled(true);
+
+    sf::Vector2f velocity(sf::Vector2f(0, 0));
 
     sf::Texture t;
     if (!t.loadFromFile("images/bg.png"))
@@ -28,25 +30,26 @@ int main()
         "}"
         , sf::Shader::Vertex);
 
-    sf::RectangleShape player(sf::Vector2f(400, 400));
-    player.setPosition(100,575);
-    sf::Texture playerTexture;
-    if(!playerTexture.loadFromFile("images/sp.png"))
-        return EXIT_FAILURE;
-    player.setTexture(&playerTexture);
+    float offset = 0.f;
+    sf::Clock clock;
 
-    Animation animation(&playerTexture, sf::Vector2u(6, 5), 0.2f);
+    sf::Texture playerTexture;
+    if(!playerTexture.loadFromFile("images/sp5.png"))
+        return EXIT_FAILURE;
+
+    Player player(&playerTexture, sf::Vector2u(6, 5), 0.15f, 100.0f);
 
     float deltaTime = 0.0f;
     sf::Clock clock2;
 
-    float offset = 0.f;
-    sf::Clock clock;
-
     while (window.isOpen())
     {
         deltaTime = clock2.restart().asSeconds();
+        
         sf::Event event;
+
+
+        //Event Loop:
         while (window.pollEvent(event))
         {
             switch (event.type) {
@@ -54,18 +57,17 @@ int main()
                 window.close();
                 break;
             }
-           
         }
         
         //set an arbitrary value as the offset, you'd calculate this based on camera position
-        parallaxShader.setUniform("offset", offset += clock.restart().asSeconds() / 500);
+        parallaxShader.setUniform("offset", offset += clock.restart().asSeconds() / 20);
 
-        animation.Update(0, deltaTime);
-        player.setTextureRect(animation.uvRect);
+        player.Update(deltaTime);
 
         window.clear();
         window.draw(background, &parallaxShader);
-        window.draw(player);
+        player.Draw(window);
+        //player.drawTo(window);
         window.display();
     }
 
